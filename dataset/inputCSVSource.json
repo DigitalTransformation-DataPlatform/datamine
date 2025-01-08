@@ -7,10 +7,12 @@
 		},
 		"parameters": {
 			"file_name": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "products.csv"
 			},
 			"folder_name": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "stg"
 			},
 			"container": {
 				"type": "string"
@@ -39,7 +41,24 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "ProductID",
+				"type": "String"
+			},
+			{
+				"name": "ProductName",
+				"type": "String"
+			},
+			{
+				"name": "Category",
+				"type": "String"
+			},
+			{
+				"name": "ListPrice",
+				"type": "String"
+			}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
