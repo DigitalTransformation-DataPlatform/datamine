@@ -77,7 +77,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"file_name": "moviesDB2.csv",
-									"folder_name": "stgsdsad",
+									"folder_name": "stg",
 									"container": "lakehouse"
 								}
 							}
