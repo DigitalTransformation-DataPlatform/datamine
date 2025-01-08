@@ -9,6 +9,10 @@
 			"file_name": {
 				"type": "string",
 				"defaultValue": "products.csv"
+			},
+			"folder_name": {
+				"type": "string",
+				"defaultValue": "stg"
 			}
 		},
 		"annotations": [],
