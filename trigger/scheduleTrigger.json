@@ -1,0 +1,25 @@
+{
+	"name": "scheduleTrigger",
+	"properties": {
+		"description": "scheduleTrigger",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "STG_Dw_Data_Copy",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2025-01-09T21:04:00",
+				"timeZone": "SE Asia Standard Time"
+			}
+		}
+	}
+}
