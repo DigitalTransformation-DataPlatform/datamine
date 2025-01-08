@@ -53,7 +53,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"file_name": "moviesDB2.csv",
-							"folder_name": "stgasdasdasd",
+							"folder_name": "stg",
 							"container": "lakehouse"
 						}
 					}
