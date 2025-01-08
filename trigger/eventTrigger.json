@@ -16,7 +16,7 @@
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/lakehouse/blobs/",
+			"blobPathBeginsWith": "/lakehouse/blobs/stg/",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/fe52ac68-0800-4662-875e-263c9bb014ca/resourceGroups/big-data-platform/providers/Microsoft.Storage/storageAccounts/bigdatalake202501",
 			"events": [
