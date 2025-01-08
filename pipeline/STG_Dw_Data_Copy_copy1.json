@@ -52,7 +52,10 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "moviesDB2.csv",
+							"file_name": {
+								"value": "@pipeline().parameters.FileName",
+								"type": "Expression"
+							},
 							"folder_name": "stg",
 							"container": "lakehouse"
 						}
@@ -63,7 +66,10 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "moviesDB2.csv",
+							"file_name": {
+								"value": "@pipeline().parameters.FileName",
+								"type": "Expression"
+							},
 							"folder_name": "ods",
 							"container": "lakehouse"
 						}
@@ -127,7 +133,10 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "moviesDB2.csv",
+							"file_name": {
+								"value": "@pipeline().parameters.FileName",
+								"type": "Expression"
+							},
 							"folder_name": "ods",
 							"container": "lakehouse"
 						}
@@ -138,7 +147,7 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "moviesDB2.csv",
+							"file_name": "@pipeline().parameters.FileName",
 							"folder_name": "dw",
 							"container": "lakehouse"
 						}
@@ -202,7 +211,7 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "moviesDB2.csv",
+							"file_name": "@pipeline().parameters.FileName",
 							"folder_name": "dw",
 							"container": "lakehouse"
 						}
@@ -213,7 +222,7 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "moviesDB2.csv",
+							"file_name": "@pipeline().parameters.FileName",
 							"folder_name": "datamart",
 							"container": "lakehouse"
 						}
@@ -221,6 +230,11 @@
 				]
 			}
 		],
+		"parameters": {
+			"FileName": {
+				"type": "string"
+			}
+		},
 		"annotations": [
 			"data_movement"
 		],
