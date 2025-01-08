@@ -15,10 +15,18 @@
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
-				"frequency": "Minute",
+				"frequency": "Day",
 				"interval": 15,
 				"startTime": "2025-01-09T21:04:00",
-				"timeZone": "SE Asia Standard Time"
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						9
+					],
+					"hours": [
+						21
+					]
+				}
 			}
 		}
 	}
