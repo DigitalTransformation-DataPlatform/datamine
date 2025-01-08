@@ -77,7 +77,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"file_name": "products.csv",
-									"folder_name": "stg"
+									"folder_name": "tala"
 								}
 							}
 						],
@@ -166,7 +166,7 @@
 										"value": "@concat('product', utcnow(), '.csv')\n",
 										"type": "Expression"
 									},
-									"folder_name": "stg"
+									"folder_name": "ods"
 								}
 							}
 						]
