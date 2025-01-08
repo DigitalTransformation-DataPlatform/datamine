@@ -97,7 +97,8 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2025-01-08T04:01:38Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/inputCSVSource')]"
