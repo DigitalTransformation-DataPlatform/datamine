@@ -13,6 +13,9 @@
 			"folder_name": {
 				"type": "string",
 				"defaultValue": "stg"
+			},
+			"container": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -28,7 +31,10 @@
 					"value": "@dataset().folder_name",
 					"type": "Expression"
 				},
-				"fileSystem": "lakehouse"
+				"fileSystem": {
+					"value": "@dataset().container",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
