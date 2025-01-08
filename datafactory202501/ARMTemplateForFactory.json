@@ -98,7 +98,14 @@
 					{
 						"name": "datamovement_copy1_copy1",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "datamovement_copy1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -146,7 +153,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"file_name": "products.csv",
-									"folder_name": "stgsdsadasd"
+									"folder_name": "stg"
 								}
 							}
 						],
