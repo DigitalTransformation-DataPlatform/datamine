@@ -102,7 +102,7 @@
 							{
 								"activity": "datamovement_copy1",
 								"dependencyConditions": [
-									"Failed"
+									"Succeeded"
 								]
 							}
 						],
