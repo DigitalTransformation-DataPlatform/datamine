@@ -21,13 +21,13 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/datamovementDDD')]",
+			"name": "[concat(parameters('factoryName'), '/STG_Dw_Data_Copy')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "datamovement_copy1",
+						"name": "stg-to-ods",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -76,8 +76,9 @@
 								"referenceName": "inputCSVSource",
 								"type": "DatasetReference",
 								"parameters": {
-									"file_name": "products.csv",
-									"folder_name": "stgsdsadasd"
+									"file_name": "moviesDB2.csv",
+									"folder_name": "stgasdasdasd",
+									"container": "lakehouse"
 								}
 							}
 						],
@@ -86,21 +87,19 @@
 								"referenceName": "inputCSVSource",
 								"type": "DatasetReference",
 								"parameters": {
-									"file_name": {
-										"value": "@concat('product', utcnow(), '.csv')\n",
-										"type": "Expression"
-									},
-									"folder_name": "ods"
+									"file_name": "moviesDB2.csv",
+									"folder_name": "ods",
+									"container": "lakehouse"
 								}
 							}
 						]
 					},
 					{
-						"name": "datamovement_copy1_copy1",
+						"name": "ods-to-dw",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "datamovement_copy1",
+								"activity": "stg-to-ods",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -152,8 +151,9 @@
 								"referenceName": "inputCSVSource",
 								"type": "DatasetReference",
 								"parameters": {
-									"file_name": "products.csv",
-									"folder_name": "stg"
+									"file_name": "moviesDB2.csv",
+									"folder_name": "ods",
+									"container": "lakehouse"
 								}
 							}
 						],
@@ -162,11 +162,94 @@
 								"referenceName": "inputCSVSource",
 								"type": "DatasetReference",
 								"parameters": {
-									"file_name": {
-										"value": "@concat('product', utcnow(), '.csv')\n",
-										"type": "Expression"
-									},
-									"folder_name": "ods"
+									"file_name": "moviesDB2.csv",
+									"folder_name": "dw",
+									"container": "lakehouse"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [
+					"data_movement"
+				],
+				"lastPublishTime": "2025-01-08T06:48:00Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/inputCSVSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/data_movement')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "stg-ods-movement",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "csvFiles",
+								"type": "DatasetReference",
+								"parameters": {
+									"folder_name": "stg",
+									"file_name": "moviesDB2.csv"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "csvFiles",
+								"type": "DatasetReference",
+								"parameters": {
+									"folder_name": "ods",
+									"file_name": "moviesDB2.csv"
 								}
 							}
 						]
@@ -179,11 +262,11 @@
 				"lastPublishTime": "2025-01-08T04:01:38Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/inputCSVSource')]"
+				"[concat(variables('factoryId'), '/datasets/csvFiles')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/inputCSVSource')]",
+			"name": "[concat(parameters('factoryName'), '/csvFiles')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -192,13 +275,11 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"file_name": {
-						"type": "string",
-						"defaultValue": "products.csv"
-					},
 					"folder_name": {
-						"type": "string",
-						"defaultValue": "stg"
+						"type": "string"
+					},
+					"file_name": {
+						"type": "string"
 					}
 				},
 				"annotations": [],
@@ -223,22 +304,75 @@
 				},
 				"schema": [
 					{
-						"name": "ProductID",
+						"name": "movies",
 						"type": "String"
 					},
 					{
-						"name": "ProductName",
+						"name": "Title",
 						"type": "String"
 					},
 					{
-						"name": "Category",
+						"name": "genresgenregenre",
 						"type": "String"
 					},
 					{
-						"name": "ListPrice",
+						"name": "YEAR",
+						"type": "String"
+					},
+					{
+						"name": "Rating",
 						"type": "String"
 					}
 				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/inputCSVSource')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"file_name": {
+						"type": "string"
+					},
+					"folder_name": {
+						"type": "string"
+					},
+					"container": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().file_name",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().folder_name",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage')]"
