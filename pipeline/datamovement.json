@@ -52,7 +52,8 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "products.csv"
+							"file_name": "products.csv",
+							"folder_name": "tala"
 						}
 					}
 				],
@@ -64,7 +65,8 @@
 							"file_name": {
 								"value": "@concat('product', utcnow(), '.csv')\n",
 								"type": "Expression"
-							}
+							},
+							"folder_name": "stg"
 						}
 					}
 				]
@@ -126,7 +128,8 @@
 						"referenceName": "inputCSVSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "products.csv"
+							"file_name": "products.csv",
+							"folder_name": "stg"
 						}
 					}
 				],
@@ -138,7 +141,8 @@
 							"file_name": {
 								"value": "@concat('product', utcnow(), '.csv')\n",
 								"type": "Expression"
-							}
+							},
+							"folder_name": "ods"
 						}
 					}
 				]
