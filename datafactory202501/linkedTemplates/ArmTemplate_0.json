@@ -188,7 +188,7 @@
 							{
 								"activity": "datamovement",
 								"dependencyConditions": [
-									"Failed"
+									"Succeeded"
 								]
 							}
 						],
