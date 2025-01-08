@@ -26,12 +26,45 @@
 							"type": "DelimitedTextReadSettings"
 						}
 					},
-					"enableStaging": false
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
 				},
 				"inputs": [
 					{
 						"referenceName": "csvFiles",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"folder_name": "stg",
+							"file_name": "moviesDB2.csv"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "csvFiles",
+						"type": "DatasetReference",
+						"parameters": {
+							"folder_name": "ods",
+							"file_name": "moviesDB2.csv"
+						}
 					}
 				]
 			}
