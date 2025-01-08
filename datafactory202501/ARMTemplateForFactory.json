@@ -76,7 +76,8 @@
 								"referenceName": "inputCSVSource",
 								"type": "DatasetReference",
 								"parameters": {
-									"file_name": "products.csv"
+									"file_name": "products.csv",
+									"folder_name": "stg"
 								}
 							}
 						],
@@ -88,7 +89,84 @@
 									"file_name": {
 										"value": "@concat('product', utcnow(), '.csv')\n",
 										"type": "Expression"
-									}
+									},
+									"folder_name": "stg"
+								}
+							}
+						]
+					},
+					{
+						"name": "datamovement_copy1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "datamovement",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "inputCSVSource",
+								"type": "DatasetReference",
+								"parameters": {
+									"file_name": "products.csv",
+									"folder_name": "stg"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "inputCSVSource",
+								"type": "DatasetReference",
+								"parameters": {
+									"file_name": {
+										"value": "@concat('product', utcnow(), '.csv')\n",
+										"type": "Expression"
+									},
+									"folder_name": "stg"
 								}
 							}
 						]
@@ -117,6 +195,10 @@
 					"file_name": {
 						"type": "string",
 						"defaultValue": "products.csv"
+					},
+					"folder_name": {
+						"type": "string",
+						"defaultValue": "stg"
 					}
 				},
 				"annotations": [],
@@ -128,7 +210,10 @@
 							"value": "@dataset().file_name",
 							"type": "Expression"
 						},
-						"folderPath": "stg",
+						"folderPath": {
+							"value": "@dataset().folder_name",
+							"type": "Expression"
+						},
 						"fileSystem": "lakehouse"
 					},
 					"columnDelimiter": ",",
@@ -174,6 +259,13 @@
 					}
 				}
 			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/globalparameters",
+			"apiVersion": "2018-06-01",
+			"properties": {},
 			"dependsOn": []
 		}
 	]
